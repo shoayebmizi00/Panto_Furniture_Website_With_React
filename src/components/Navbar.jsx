@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { FaShoppingCart } from "react-icons/fa";
 import { FaBars } from "react-icons/fa";
@@ -32,15 +32,33 @@ const NavItems = ({ handleMenuToggle }) => {
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const [isScrolled, setScrolled] = useState(false);
+  
   const handleMenuToggle = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  //When scrool, apply bg color to navbar
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [])
+
   return (
     <>
-      <header className={'fixed top-0 left-0 w-full z-50 transition duration-300 ease-in-out text-white'}>
-        <nav className='max-w-screen-2xl container flex justify-between items-center mx-auto py-6 px-4'>
+      <header className={`fixed top-0 left-0 w-full z-50 transition duration-300 ease-in-out ${isScrolled ? "bg-white shadow-md text-black":"bg-transparent text-white"}`}>
+        <nav className='max-w-screen-2xl container flex justify-between ems-center mx-auto py-6 px-4'>
           <div>
             <Link to="/" className='font-bold'>Panto</Link>
           </div>
